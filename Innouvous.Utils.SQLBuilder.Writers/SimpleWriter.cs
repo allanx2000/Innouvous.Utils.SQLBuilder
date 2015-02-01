@@ -18,25 +18,18 @@ namespace Innouvous.Utils.SQLBuilder.Writers
         
         private string MakeWhereCondition(WhereDefinition where, bool includeTableName)
         {
-            string name = MakeColumnName(where.Column);
+            string name = MakeColumnName(where.Column, includeTableName);
 
             return String.Join(" ", name, where.Operator, QueryFormat(where.Value));
         }
 
-        private enum NameType
-        {
-            Alias,
-            FieldName,
-            Select
-        }
-        
-        private string MakeColumnName(IColumn column)
+        private string MakeColumnName(IColumn column, bool includeTableName = true)
         {
             if (column is FieldColumn)
             {
                 var col = (FieldColumn)column;
 
-                return MakeFullName(col);
+                return includeTableName? MakeFullName(col) : col.Field;
             }
             else if (column is ComplexColumn)
             {

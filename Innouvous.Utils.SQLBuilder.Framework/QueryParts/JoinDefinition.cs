@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Innouvous.Utils.SQLBuilder.Framework.QueryParts
 {
-    public struct JoinDefinition
+    public class JoinDefinition
     {
         public enum JoinType
         {
@@ -26,7 +26,7 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryParts
             }
         }
 
-        public JoinDefinition(JoinType type, string jointable, params FieldColumn[] columnPairs) : this()
+        public JoinDefinition(JoinType type, string jointable, params FieldColumn[] columnPairs)
         {
             Type = type;
 

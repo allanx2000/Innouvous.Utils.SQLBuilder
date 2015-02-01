@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Innouvous.Utils.SQLBuilder.Framework.QueryParts
 {
-    public struct FieldColumn : IColumn
+    public class FieldColumn : IColumn
     {
         public string Table { get; private set; }
         public string Field { get; private set; }
 
-        public FieldColumn(string table, string fieldName, string alias = null) : this()
+        public FieldColumn(string table, string fieldName, string alias = null)
         {
             this.Table = table;
             this.Field = fieldName;

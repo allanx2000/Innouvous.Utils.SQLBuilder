@@ -13,7 +13,7 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryParts
         Or
     }
 
-    public struct WhereDefinition
+    public class WhereDefinition
     {
         public IColumn Column { get; private set; }
 
@@ -30,7 +30,6 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryParts
         }
 
         public WhereDefinition(WhereType type, IColumn column, string op, object value)
-            : this()
         {
             this.Column = column;
             this.Value = value;
