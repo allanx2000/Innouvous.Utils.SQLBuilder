@@ -10,11 +10,11 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryModels
     public class UpdateModel
     {
         public List<WhereDefinition> Where { get; private set; }
-        public List<KeyValuePair<ColumnDefinition, object>> Set { get; private set; }
+        public List<KeyValuePair<FieldColumn, object>> Set { get; private set; }
 
         public string Table {get; private set; }
 
-        public UpdateModel(string table, List<WhereDefinition> where, List<KeyValuePair<ColumnDefinition, object>> set)
+        public UpdateModel(string table, List<WhereDefinition> where, List<KeyValuePair<FieldColumn, object>> set)
         {
             Table = table;
             Where = where;

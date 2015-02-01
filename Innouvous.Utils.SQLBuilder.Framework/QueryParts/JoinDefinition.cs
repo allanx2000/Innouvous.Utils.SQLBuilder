@@ -17,16 +17,16 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryParts
         public JoinType Type {get; private set;}
         public string JoinTable { get; private set; }
         
-        private List<ColumnDefinition> columns;
-        public List<ColumnDefinition> Columns
+        private List<FieldColumn> columns;
+        public List<FieldColumn> Columns
         {
             get
             {
-                return new List<ColumnDefinition>(columns);
+                return new List<FieldColumn>(columns);
             }
         }
 
-        public JoinDefinition(JoinType type, string jointable, params ColumnDefinition[] columnPairs) : this()
+        public JoinDefinition(JoinType type, string jointable, params FieldColumn[] columnPairs) : this()
         {
             Type = type;
 
@@ -37,7 +37,7 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryParts
             else if (columnPairs.Length % 2 == 1)
                 throw new Exception("Columns must be in pairs");
 
-            columns = new List<ColumnDefinition>(columnPairs);
+            columns = new List<FieldColumn>(columnPairs);
         }
 
     }

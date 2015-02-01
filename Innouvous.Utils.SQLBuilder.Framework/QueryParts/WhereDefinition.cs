@@ -15,7 +15,7 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryParts
 
     public struct WhereDefinition
     {
-        public ColumnDefinition Column { get; private set; }
+        public IColumn Column { get; private set; }
 
         public object Value { get; private set; }
 
@@ -24,11 +24,13 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryParts
         
         public WhereType Joiner { get; private set; }
 
-        public WhereDefinition(ColumnDefinition column, string op, object value):this(WhereType.NA, column,op,value)
+        public WhereDefinition(IColumn column, string op, object value)
+            : this(WhereType.NA, column, op, value)
         {
         }
 
-        public WhereDefinition(WhereType type, ColumnDefinition column, string op, object value):this()
+        public WhereDefinition(WhereType type, IColumn column, string op, object value)
+            : this()
         {
             this.Column = column;
             this.Value = value;

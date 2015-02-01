@@ -14,14 +14,47 @@ namespace Innouvous.Utils.SQLBuilder.Writers
     public class SimpleWriter : AbstractBaseWriter
     {
         #region Private
-        private string MakeWhereCondition(WhereDefinition where, bool hasTableName)
+
+        
+        private string MakeWhereCondition(WhereDefinition where, bool includeTableName)
         {
-            return String.Join(" ", hasTableName ? MakeColumnName(where.Column) : where.Column.ColumnName, where.Operator, QueryFormat(where.Value));
+            string name = MakeColumnName(where.Column);
+
+            return String.Join(" ", name, where.Operator, QueryFormat(where.Value));
         }
 
-        private string MakeColumnName(ColumnDefinition col)
+        private enum NameType
         {
-            return String.Format("{0}.{1}", col.Table, col.ColumnName);
+            Alias,
+            FieldName,
+            Select
+        }
+        
+        private string MakeColumnName(IColumn column)
+        {
+            if (column is FieldColumn)
+            {
+                var col = (FieldColumn)column;
+
+                return MakeFullName(col);
+            }
+            else if (column is ComplexColumn)
+            {
+                var col = (ComplexColumn)column;
+
+                if (String.IsNullOrEmpty(col.Alias))
+                    throw new Exception("Alias must be defined!");
+                else
+                    return col.Alias;
+            }
+            else throw new NotSupportedException();
+        }
+        
+        private string MakeFullName(FieldColumn column)
+        {
+            string name = String.Format("{0}.{1}", column.Table, column.Field);
+
+            return name;
         }
 
         private string CreateJoin(ICollection<JoinDefinition> joins)
@@ -74,21 +107,44 @@ namespace Innouvous.Utils.SQLBuilder.Writers
             else
                 return value.ToString();
         }
-        
-        private string CreateSelect(string columns)
+
+        private string CreateSelect(ICollection<IColumn> columns)
         {
-            return "SELECT " + columns;
-        }
+            string selectString = "SELECT ";
 
-        private string CreateSelect(ICollection<ColumnDefinition> columns)
-        {
-            StringBuilder sb = new StringBuilder();
+            List<string> items = new List<string>();
 
-            sb.Append("SELECT ");
-            var cols = (from c in columns select MakeColumnName(c));
-            sb.Append(String.Join(", ", cols));
+            foreach (var c in columns)
+            {
+                string name;
+                string alias;
 
-            return sb.ToString();
+                if (c is FieldColumn)
+                {
+                    var col = (FieldColumn) c;
+
+                    name = MakeFullName(col);
+                    alias = col.Alias;
+                }
+                else if (c is ComplexColumn)
+                {
+                    var col = (ComplexColumn) c;
+
+                    name = col.Formula;
+                    alias = col.Alias;
+                }
+                else throw new NotSupportedException();
+
+                string fullName = name;
+                if (!String.IsNullOrEmpty(alias))
+                    fullName += " AS " + alias;
+
+                items.Add(fullName);
+            }
+
+            selectString += String.Join(", ", items);
+
+            return selectString;
         }
 
         private string CreateFrom(string table)
@@ -154,16 +210,39 @@ namespace Innouvous.Utils.SQLBuilder.Writers
                 }
 
 
+
                 parts.Add(String.Format("{0} {1}", MakeColumnName(order.Column), orderString));
             }
 
             return "ORDER BY " + String.Join(", ", parts);
         }
-
-
-        private string CreateGroupBy(List<ColumnDefinition> columns)
+        
+        private string CreateGroupBy(List<IColumn> columns)
         {
-            string groupBy = "GROUP BY " + String.Join(", ", from c in columns select MakeColumnName(c));
+            List<string> names = new List<string>();
+
+            foreach (var c in columns)
+            {
+
+                if (c is FieldColumn)
+                {
+                    var col = (FieldColumn)c;
+
+                    names.Add(MakeFullName(col));
+                }
+                else if (c is ComplexColumn)
+                {
+                    var col = (ComplexColumn)c;
+
+                    if (String.IsNullOrEmpty(col.Alias))
+                        throw new Exception("Alias must be defined to be used in WHERE");
+                    else
+                        names.Add(col.Alias);
+                }
+                else throw new NotSupportedException();
+            }
+
+            string groupBy = "GROUP BY " + String.Join(", ", names);
 
             return groupBy;
         }
@@ -180,10 +259,7 @@ namespace Innouvous.Utils.SQLBuilder.Writers
             //SELECT
             string select;
 
-            if (!model.HasCustomSelect)
-                select = CreateSelect(model.GetSelect());
-            else
-                select = CreateSelect(model.GetCustomSelect());
+            select = CreateSelect(model.GetSelect());
 
             sb.AppendLine(select);
 
@@ -209,16 +285,16 @@ namespace Innouvous.Utils.SQLBuilder.Writers
             return sb.ToString().Trim();
         }
 
-        protected override string CreateInsert(string table, List<KeyValuePair<ColumnDefinition, object>> values)
+        protected override string CreateInsert(string table, List<KeyValuePair<FieldColumn, object>> values)
         {
             string format = "INSERT INTO {0}({1}) VALUES({2})";
 
-            string keys = String.Join(", ", from kv in values select kv.Key.ColumnName);
+            string keys = String.Join(", ", from kv in values select kv.Key.Field);
             string data = String.Join(", ", from kv in values select QueryFormat(kv.Value));
 
             return String.Format(format, table, keys, data);
         }
-                
+
         protected override string CreateInsert(string table, List<object> values)
         {
             string data = String.Join(", ", from v in values select QueryFormat(v));
@@ -232,7 +308,7 @@ namespace Innouvous.Utils.SQLBuilder.Writers
 
             sb.AppendLine("UPDATE " + query.Table);
 
-            string set = String.Join(", ", from kv in query.Set select kv.Key.ColumnName + " = " + QueryFormat(kv.Value));
+            string set = String.Join(", ", from kv in query.Set select kv.Key.Field + " = " + QueryFormat(kv.Value));
             sb.AppendLine("SET " + set);
 
             string where = CreateWhere(query.Where, false);

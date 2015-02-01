@@ -45,7 +45,9 @@
     <Compile Include="QueryModels\InsertModel.cs" />
     <Compile Include="QueryModels\SelectModel.cs" />
     <Compile Include="QueryModels\UpdateModel.cs" />
-    <Compile Include="QueryParts\ColumnDefinition.cs" />
+    <Compile Include="QueryParts\ComplexColumn.cs" />
+    <Compile Include="QueryParts\FieldColumn.cs" />
+    <Compile Include="QueryParts\IColumn.cs" />
     <Compile Include="QueryParts\JoinDefinition.cs" />
     <Compile Include="QueryParts\OrderByDefinition.cs" />
     <Compile Include="QueryParts\WhereDefinition.cs" />

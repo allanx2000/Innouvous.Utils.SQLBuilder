@@ -11,7 +11,7 @@ namespace Innouvous.Utils.SQLBuilder.Tests
     public class DeleteTest
     {
         private static string table = "table";
-        private static ColumnDefinition col1 = new ColumnDefinition(table, "ID");
+        private static FieldColumn col1 = new FieldColumn(table, "ID");
         public static string DeleteAll(ISQLQueryWriter writer)
         {
             var q = QueryModelFactory.CreateDeleteAll(table);

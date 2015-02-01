@@ -10,17 +10,13 @@ namespace Innouvous.Utils.SQLBuilder
 {
     public static class QueryModelFactory
     {
-        public static SelectModel CreateSelect(string select)
-        {
-            return new SelectModel(select);
-        }
-
-        public static SelectModel CreateSelect(params ColumnDefinition[] columns)
+        
+        public static SelectModel CreateSelect(params IColumn[] columns)
         {
             return new SelectModel(columns.ToList());
         }
 
-        public static SelectModel CreateSelect(List<ColumnDefinition> columns)
+        public static SelectModel CreateSelect(List<IColumn> columns)
         {
             return new SelectModel(columns);
         }
@@ -35,12 +31,12 @@ namespace Innouvous.Utils.SQLBuilder
             return new InsertModel(table, values);
         }
 
-        public static InsertModel CreateInsert(string table, params KeyValuePair<ColumnDefinition, object>[] values)
+        public static InsertModel CreateInsert(string table, params KeyValuePair<FieldColumn, object>[] values)
         {
             return CreateInsert(table, values.ToList());
         }
 
-        public static InsertModel CreateInsert(string table, List<KeyValuePair<ColumnDefinition, object>> values)
+        public static InsertModel CreateInsert(string table, List<KeyValuePair<FieldColumn, object>> values)
         {
             return new InsertModel(table, values);
         }
@@ -58,7 +54,7 @@ namespace Innouvous.Utils.SQLBuilder
             return new DeleteModel(table);
         }
 
-        public static UpdateModel CreateUpdate(string table, List<KeyValuePair<ColumnDefinition,object>> sets, List<WhereDefinition> wheres)
+        public static UpdateModel CreateUpdate(string table, List<KeyValuePair<FieldColumn,object>> sets, List<WhereDefinition> wheres)
         {
             return new UpdateModel(table, wheres, sets);
         }

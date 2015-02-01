@@ -31,7 +31,7 @@ namespace Innouvous.Utils.SQLBuilder.Writers
             return result;
         }
         
-        protected abstract string CreateInsert(string table, List<KeyValuePair<ColumnDefinition, object>> values);
+        protected abstract string CreateInsert(string table, List<KeyValuePair<FieldColumn, object>> values);
         protected abstract string CreateInsert(string table, List<object> values);
 
 

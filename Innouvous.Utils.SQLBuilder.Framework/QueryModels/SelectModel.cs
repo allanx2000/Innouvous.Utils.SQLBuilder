@@ -10,23 +10,15 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryModels
 {
     public class SelectModel
     {
-        private List<ColumnDefinition> select;
-        //private string selectString;
+        private List<IColumn> select;
 
         private string from;
         private List<WhereDefinition> wheres;
         private List<JoinDefinition> joins;
         private List<OrderByDefinition> orderby;
 
-        private List<ColumnDefinition> groupBy;
+        private List<IColumn> groupBy;
 
-        public bool HasCustomSelect
-        {
-            get
-            {
-                return !String.IsNullOrEmpty(selectString);
-            }
-        }
         public bool HasGroupBy
         {
             get
@@ -64,26 +56,16 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryModels
             return list != null && list.Count > 0;
         }
 
-        public SelectModel(string selectString)
-        {
-            this.selectString = selectString;
-        }
-
-        public SelectModel(List<ColumnDefinition> selectColumns)
+        public SelectModel(List<IColumn> selectColumns)
         {
             this.select = selectColumns;
         }
 
         #region Getters
 
-        public string GetCustomSelect()
+        public List<IColumn> GetSelect()
         {
-            return selectString;
-        }
-
-        public List<ColumnDefinition> GetSelect()
-        {
-            return !HasCustomSelect? new List<ColumnDefinition>(select) : null;
+            return new List<IColumn>(select);
         }
 
         public string GetFrom()
@@ -107,22 +89,22 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryModels
             return HasOrderBy ? new List<OrderByDefinition>(orderby) : null;
         }
 
-        public List<ColumnDefinition> GetGroupBy()
+        public List<IColumn> GetGroupBy()
         {
-            return HasGroupBy ? new List<ColumnDefinition>(groupBy) : null;
+            return HasGroupBy ? new List<IColumn>(groupBy) : null;
         }
 
 
         #endregion
 
-        public SelectModel Select(params ColumnDefinition[] columns)
+        public SelectModel Select(params IColumn[] columns)
         {
             if (select != null)
                 throw new Exception("Select has already been defined!");
 
-            select = new List<ColumnDefinition>();
+            select = new List<IColumn>();
 
-            foreach (ColumnDefinition col in columns)
+            foreach (IColumn col in columns)
             {
                 select.Add(col);
             }
@@ -176,7 +158,7 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryModels
 
 
 
-        public SelectModel GroupBy(params ColumnDefinition[] columns)
+        public SelectModel GroupBy(params IColumn[] columns)
         {
             if (this.groupBy != null)
                 throw new Exception("GroupBy already declared");

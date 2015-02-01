@@ -12,10 +12,10 @@ namespace Innouvous.Utils.SQLBuilder.Tests
     public static class UpdateTest
     {
         private static string table = "table";
-        private static ColumnDefinition col1 = new ColumnDefinition(table, "Col1");
-        private static ColumnDefinition col2 = new ColumnDefinition(table, "Col2");
-        private static ColumnDefinition col3 = new ColumnDefinition(table, "Col3");
-        private static ColumnDefinition col4 = new ColumnDefinition(table, "Col4");
+        private static FieldColumn col1 = new FieldColumn(table, "Col1");
+        private static FieldColumn col2 = new FieldColumn(table, "Col2");
+        private static FieldColumn col3 = new FieldColumn(table, "Col3");
+        private static FieldColumn col4 = new FieldColumn(table, "Col4");
 
         public static string TestUpdate(ISQLQueryWriter writer)
         {
@@ -25,10 +25,10 @@ namespace Innouvous.Utils.SQLBuilder.Tests
                     new WhereDefinition(col1,"=", 1),
                     new WhereDefinition(WhereType.And,col2,"=", "test")
                 },
-                new List<KeyValuePair<ColumnDefinition, object>>()
+                new List<KeyValuePair<FieldColumn, object>>()
                 {
-                    new KeyValuePair<ColumnDefinition,object>(col3, 1),
-                    new KeyValuePair<ColumnDefinition,object>(col4, "test2")
+                    new KeyValuePair<FieldColumn,object>(col3, 1),
+                    new KeyValuePair<FieldColumn,object>(col4, "test2")
                 });
 
             return writer.CreateUpdateQuery(query);

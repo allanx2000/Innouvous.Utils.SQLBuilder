@@ -10,10 +10,10 @@ namespace Innouvous.Utils.SQLBuilder.Tests
 {
     public class InsertTest
     {
-        private static Dictionary<ColumnDefinition, object> values = new Dictionary<ColumnDefinition, object>()
+        private static Dictionary<FieldColumn, object> values = new Dictionary<FieldColumn, object>()
         {
-            {new ColumnDefinition(table,"ID"), 1},
-            {new ColumnDefinition(table,"Name"), "test"}
+            {new FieldColumn(table,"ID"), 1},
+            {new FieldColumn(table,"Name"), "test"}
         };
 
         private const string table = "table1";

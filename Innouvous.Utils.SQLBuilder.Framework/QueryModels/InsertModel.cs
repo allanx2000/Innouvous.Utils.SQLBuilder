@@ -11,7 +11,7 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryModels
     {
         public string Table { get; private set; }
         public List<object> Values { get; private set; }
-        public List<KeyValuePair<ColumnDefinition, object>> KeyValues { get; private set; }
+        public List<KeyValuePair<FieldColumn, object>> KeyValues { get; private set; }
         
         public InsertModel(string table, object[] values)
         {
@@ -19,7 +19,7 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryModels
             Values = values.ToList();
         }
 
-        public InsertModel(string table, List<KeyValuePair<ColumnDefinition, object>> values)
+        public InsertModel(string table, List<KeyValuePair<FieldColumn, object>> values)
         {
             Table = table;
             KeyValues = values;

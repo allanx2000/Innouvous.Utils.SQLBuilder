@@ -15,9 +15,9 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryParts
         }
 
         public SortDirection Order { get; private set; }
-        public ColumnDefinition Column { get; private set; }
+        public IColumn Column { get; private set; }
 
-        public OrderByDefinition(ColumnDefinition column, SortDirection order = SortDirection.Ascending)
+        public OrderByDefinition(IColumn column, SortDirection order = SortDirection.Ascending)
         {
             this.Order = order;
             this.Column = column;
