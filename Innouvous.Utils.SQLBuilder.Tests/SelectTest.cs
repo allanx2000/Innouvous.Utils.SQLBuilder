@@ -35,8 +35,8 @@ namespace Innouvous.Utils.SQLBuilder.Tests
                     new WhereDefinition(WhereType.Or, count, ">", 3)
                 )
                 .Join(
-                    new JoinDefinition(JoinDefinition.JoinType.INNER, table2, col1, col3),  
-                    new JoinDefinition(JoinDefinition.JoinType.INNER, table3, col2, col4, col3, col6)
+                    new JoinDefinition(JoinDefinition.JoinType.INNER, table2, col1, col4),  
+                    new JoinDefinition(JoinDefinition.JoinType.INNER, table3, col2, col5, col3, col6)
                 )
                 .OrderBy(
                     new OrderByDefinition(count),

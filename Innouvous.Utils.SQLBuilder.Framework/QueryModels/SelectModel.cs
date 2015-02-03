@@ -11,12 +11,10 @@ namespace Innouvous.Utils.SQLBuilder.Framework.QueryModels
     public class SelectModel
     {
         private List<IColumn> select;
-
         private string from;
         private List<WhereDefinition> wheres;
         private List<JoinDefinition> joins;
         private List<OrderByDefinition> orderby;
-
         private List<IColumn> groupBy;
 
         public bool HasGroupBy
